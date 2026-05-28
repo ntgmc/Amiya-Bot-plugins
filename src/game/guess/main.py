@@ -86,6 +86,8 @@ async def _(data: Message):
 
         if '预备干员' in operator.name:
             continue
+        if '盟约' in operator.name:
+            continue
 
         if curr != referee.round:
             curr = referee.round
