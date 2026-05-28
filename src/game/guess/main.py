@@ -1,4 +1,4 @@
-from core import AmiyaBotPluginInstance, Requirement
+﻿from core import AmiyaBotPluginInstance, Requirement
 from core.util import TimeRecorder
 from core.database.user import UserInfo
 
@@ -57,7 +57,13 @@ async def _(data: Message):
             ],
             keyboard=keyboard,
         )
-    event = await data.wait_channel(choice_chain, force=True)
+    # 只接受发起游戏的同一用户发送的难度选择，避免被其他用户的消息打断
+    owner_id = data.user_id
+
+    async def level_filter(msg: Message):
+        return msg.user_id == owner_id
+
+    event = await data.wait_channel(choice_chain, force=True, data_filter=level_filter)
     if not event:
         return None
 
